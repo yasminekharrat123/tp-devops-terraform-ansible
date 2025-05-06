@@ -12,6 +12,7 @@ export DOCKER_IMAGE_TAG="latest"
 
 export EC2_SSH_USER=
 export EC2_SSH_KEY_PATH=
+export EC2_PRIV_SSH_PATH=
 
 export AWS_ACCESS_KEY_ID=
 export AWS_SECRET_ACCESS_KEY=

@@ -7,7 +7,8 @@ pipeline {
         AWS_ACCESS_KEY_ID        = credentials('aws-access-key-id')
         AWS_SECRET_ACCESS_KEY    = credentials('aws-secret-access-key')
         EC2_SSH_USER             = credentials('ec2-ssh-user')
-        EC2_SSH_KEY_PATH         = credentials('ec2-ssh-key-path')           
+        EC2_SSH_KEY_PATH         = credentials('ec2-ssh-key-path') 
+        EC2_PRIV_SSH_PATH        = credentials('ec2-priv-ssh-key-path')        
         DB_PASSWORD              = credentials('db-password')
         PERSONAL_IP              = credentials('my-ip')  
 
