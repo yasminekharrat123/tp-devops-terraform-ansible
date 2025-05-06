@@ -1,0 +1,6 @@
+---
+COMMON_packages:
+  - git
+  - unzip
+
+system_user: ec2-user

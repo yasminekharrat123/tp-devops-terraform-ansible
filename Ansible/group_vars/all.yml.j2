@@ -1,0 +1,4 @@
+ec2_instance_id: "{{ tf_outputs.instance_id.value }}"
+ec2_public_ip: "{{ tf_outputs.public_ip.value }}"
+ec2_ssh_user: "{{ lookup('env', 'EC2_SSH_USER')}}"
+ec2_ssh_key_path: "{{ lookup('env', 'EC2_SSH_KEY_PATH')}}"

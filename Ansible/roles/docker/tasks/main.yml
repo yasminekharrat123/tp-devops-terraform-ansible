@@ -1,0 +1,78 @@
+---
+- name: "[DOCKER] Install Docker packages"
+  ansible.builtin.dnf:
+    name: "{{ docker_packages }}"
+    state: present
+    update_cache: yes
+
+- name: "[DOCKER]  Start and enable Docker service"
+  ansible.builtin.systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: "[DOCKER]  Add ec2-user to Docker group (avoid sudo)"
+  ansible.builtin.user:
+    name: ec2-user
+    groups: docker
+    append: yes
+  notify: Reload user session
+
+- name: "[DOCKER] - docker login"
+  community.docker.docker_login:
+    username: "{{ docker_registry_credentials.username }}"
+    password: "{{ docker_registry_credentials.password }}"
+    registry_url: "{{ docker_registry_credentials.url }}"
+  become: true
+
+
+- name: "[DOCKER] - Ensure custom Docker network exists"
+  community.docker.docker_network:
+    name: "{{ docker_network_name }}"
+    driver: bridge
+    state: present
+  become: true
+
+- name: "[DOCKER] - Ensure Postgres volume exists"
+  community.docker.docker_volume:
+    name: "{{ postgres_volume_name }}"
+    state: present
+  become: true
+
+
+- name: "[DOCKER] - Pull application image"
+  community.docker.docker_image:
+    name: "{{ app_image }}"
+    source: pull
+  become: true
+
+- name: "[DOCKER] - Pull Postgres image"
+  community.docker.docker_image:
+    name: "{{ postgres_image }}"
+    source: pull
+  become: true
+
+- name: "[DOCKER] - Ensure Postgres container is running"
+  community.docker.docker_container:
+    name: "{{ postgres_container_name }}"
+    image: "{{ postgres_image }}"
+    restart_policy: always
+    published_ports: "{{ postgres_ports }}"
+    volumes:
+      - "{{ postgres_volume_name }}:/var/lib/postgresql/data"
+    env: "{{ postgres_env_vars }}"
+    networks:
+      - name: "{{ docker_network_name }}"
+    state: started
+  become: true
+
+- name: "[DOCKER] - Ensure application container is running"
+  community.docker.docker_container:
+    name: "{{ app_container_name }}"
+    image: "{{ app_image }}"
+    restart_policy: always
+    env: "{{ app_env_vars }}"
+    networks:
+      - name: "{{ docker_network_name }}"
+    state: started
+  become: true

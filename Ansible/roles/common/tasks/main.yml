@@ -1,0 +1,14 @@
+---
+
+
+- name: "[COMMON] - Update package manager cache (Amazon Linux)"
+  yum:
+    update_cache: true
+  become: true
+
+- name: "[COMMON] - Install COMMON system packages"
+  package:
+    name: "{{ COMMON_packages | default([]) }}"
+    state: present
+  become: true
+

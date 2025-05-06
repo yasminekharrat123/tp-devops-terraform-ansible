@@ -1,0 +1,8 @@
+# Ignore Terraform variable files
+terraform.tfvars
+*.tfstate
+*.tfstate.backup
+.terraform/
+**/tf_outputs.json
+
+Ansible/group_vars/all.yml

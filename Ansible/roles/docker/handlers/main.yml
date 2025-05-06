@@ -1,0 +1,3 @@
+- name: Reload user session
+  ansible.builtin.command: "sg docker -c 'echo User added to Docker group'"
+  listen: Reload user session

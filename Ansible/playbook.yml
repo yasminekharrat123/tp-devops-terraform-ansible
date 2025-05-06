@@ -1,0 +1,31 @@
+---
+- name: Render template on localhost
+  hosts: localhost
+  tasks:
+    - name: Check if template needs updating
+      ansible.builtin.stat:
+        path: "group_vars/all.yml"
+      register: template_result
+
+    - name: Process the all.yml.j2 template
+      ansible.builtin.template:
+        src: "group_vars/all.yml.j2"
+        dest: "group_vars/all.yml"
+        mode: '0644'
+      vars:
+        tf_outputs: "{{ lookup('file', 'tf_outputs.json') | from_json }}"
+      when: not template_result.stat.exists or template_result.stat.mtime < (lookup('pipe', 'date +%s')|int - 300)
+      notify: Refresh inventory
+
+  handlers:
+    - name: Refresh inventory
+      meta: refresh_inventory
+
+
+- name: Provision EC2 and configure environment
+  hosts: ec2_instance
+  become: true
+
+  roles:
+    - common
+    - docker
