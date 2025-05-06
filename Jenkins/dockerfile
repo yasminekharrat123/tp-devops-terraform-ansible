@@ -1,0 +1,27 @@
+FROM jenkins/jenkins:lts
+
+USER root
+
+RUN apt-get update && apt-get install -y \
+    software-properties-common \
+    unzip \
+    curl \
+    gnupg \
+    python3-pip \
+    docker.io \
+    git \
+    sudo && \
+    apt-get clean
+
+ENV TERRAFORM_VERSION=1.11.4
+RUN curl -fsSL https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip -o terraform.zip && \
+    unzip terraform.zip && mv terraform /usr/local/bin/ && rm terraform.zip
+
+RUN pip3 install --upgrade pip --break-system-packages && \
+    pip3 install ansible --break-system-packages
+
+RUN usermod -aG docker jenkins
+
+RUN echo "jenkins ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+USER jenkins
