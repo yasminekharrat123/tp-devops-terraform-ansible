@@ -72,6 +72,7 @@
     image: "{{ app_image }}"
     restart_policy: always
     env: "{{ app_env_vars }}"
+    published_ports: "{{ app_ports }}"
     networks:
       - name: "{{ docker_network_name }}"
     state: started

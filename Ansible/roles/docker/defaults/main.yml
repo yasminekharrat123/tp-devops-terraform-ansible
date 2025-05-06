@@ -26,9 +26,13 @@ postgres_env_vars:
   POSTGRES_USER: yasmine
   POSTGRES_PASSWORD: "{{ db_password }}"
   POSTGRES_DB: users
-postgres_ports:
-  - "5432:5432"
+
 postgres_volume_name: pgdata
 
 
+
+app_ports:
+  - "3000:3000"
+postgres_ports:
+  - "5432:5432"
 docker_network_name: app_net
