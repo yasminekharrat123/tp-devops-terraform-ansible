@@ -24,7 +24,7 @@ create a terraform.tfvars file under Terraform/
 and add to it 
 ```bash
 key_name        = "your-ssh-key"
-public_key_path = The ssh path of your private rsa key generated locally
+public_key_path = The ssh path of your public rsa key generated locally
 my_ip = your ip
 
 

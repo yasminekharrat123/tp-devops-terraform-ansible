@@ -9,6 +9,7 @@ pipeline {
         EC2_SSH_USER             = credentials('ec2-ssh-user')
         EC2_SSH_KEY_PATH         = credentials('ec2-ssh-key-path')           
         DB_PASSWORD              = credentials('db-password')
+        PERSONAL_IP              = credentials('my-ip')  
 
         DOCKER_REGISTRY          = "docker.io"
         DOCKER_REGISTRY_IMAGE    = "ykharrat848/test-express-app"
@@ -22,7 +23,7 @@ pipeline {
                     writeFile file: 'Terraform/terraform.tfvars', text: """
                         key_name        = "my-ssh-key"
                         public_key_path = "${env.EC2_SSH_KEY_PATH}"
-                        my_ip           = "${env.BUILD_AGENT_IP ?: '0.0.0.0'}"
+                        my_ip           = "${env.PERSONAL_IP}"
                     """
                 }
             }
